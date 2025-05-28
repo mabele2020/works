@@ -1,0 +1,181 @@
+Name: MABELE JACKSON JOHN 
+Reg No.: BITA/7/23/074/TZ 
+Email: mabelejohn17@gmail.com 
+GitHub Repo: https://github.com/mabele2020/works
+
+
+
+
+
+
+package com.example.myandroidapp;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    private TextView statusText;
+    private Button clickMe;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        statusText = findViewById(R.id.statusText);
+        clickMe = findViewById(R.id.clickMe);
+
+        clickMe.setOnClickListener(v -> statusText.setText("Hello, Mabele!"));
+    }
+}
+
+xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to the App!" />
+
+    <Button
+        android:id="@+id/clickMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click Me" />
+</LinearLayout>
+
+
+calculator
+
+MainActivity
+
+package com.example.calculator
+
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var display: TextView
+    private var currentInput = ""
+    private var operator = ""
+    private var firstNum = 0.0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        display = findViewById(R.id.display)
+
+        val numberButtons = listOf(
+            R.id.btn0, R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4,
+            R.id.btn5, R.id.btn6, R.id.btn7, R.id.btn8, R.id.btn9
+        )
+
+        numberButtons.forEach { id ->
+            findViewById<Button>(id).setOnClickListener {
+                val digit = (it as Button).text.toString()
+                currentInput += digit
+                display.text = currentInput
+            }
+        }
+
+        findViewById<Button>(R.id.btnAdd).setOnClickListener { setOperator("+") }
+        findViewById<Button>(R.id.btnSubtract).setOnClickListener { setOperator("-") }
+        findViewById<Button>(R.id.btnMultiply).setOnClickListener { setOperator("*") }
+        findViewById<Button>(R.id.btnDivide).setOnClickListener { setOperator("/") }
+
+        findViewById<Button>(R.id.btnEqual).setOnClickListener { calculateResult() }
+        findViewById<Button>(R.id.btnClear).setOnClickListener {
+            currentInput = ""
+            operator = ""
+            firstNum = 0.0
+            display.text = "0"
+        }
+    }
+
+    private fun setOperator(op: String) {
+        if (currentInput.isNotEmpty()) {
+            firstNum = currentInput.toDouble()
+            currentInput = ""
+            operator = op
+        }
+    }
+
+    private fun calculateResult() {
+        if (currentInput.isNotEmpty()) {
+            val secondNum = currentInput.toDouble()
+            val result = when (operator) {
+                "+" -> firstNum + secondNum
+                "-" -> firstNum - secondNum
+                "*" -> firstNum * secondNum
+                "/" -> if (secondNum != 0.0) firstNum / secondNum else {
+                    display.text = "Error: Divide by 0"
+                    return
+                }
+                else -> 0.0
+            }
+            display.text = result.toString()
+            currentInput = ""
+            operator = ""
+        }
+    }
+}
+
+xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="32sp"
+        android:gravity="end"
+        android:padding="16dp"
+        android:background="#EEEEEE" />
+
+    <GridLayout
+        android:id="@+id/buttonGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="4"
+        android:rowCount="4"
+        android:layout_marginTop="16dp">
+
+        <!-- Number Buttons -->
+        <Button android:id="@+id/btn1" android:text="1" />
+        <Button android:id="@+id/btn2" android:text="2" />
+        <Button android:id="@+id/btn3" android:text="3" />
+        <Button android:id="@+id/btnAdd" android:text="+" />
+
+        <Button android:id="@+id/btn4" android:text="4" />
+        <Button android:id="@+id/btn5" android:text="5" />
+        <Button android:id="@+id/btn6" android:text="6" />
+        <Button android:id="@+id/btnSubtract" android:text="−" />
+
+        <Button android:id="@+id/btn7" android:text="7" />
+        <Button android:id="@+id/btn8" android:text="8" />
+        <Button android:id="@+id/btn9" android:text="9" />
+        <Button android:id="@+id/btnMultiply" android:text="×" />
+
+        <Button android:id="@+id/btnClear" android:text="C" />
+        <Button android:id="@+id/btn0" android:text="0" />
+        <Button android:id="@+id/btnEqual" android:text="=" />
+        <Button android:id="@+id/btnDivide" android:text="÷" />
+    </GridLayout>
+</LinearLayout>
